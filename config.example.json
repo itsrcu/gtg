@@ -1,0 +1,23 @@
+{
+    "steamID": "",
+    "steamVanityLink": "",
+    "sessionID": "",
+    "accessToken": "",
+    "keepCount": 1,
+    "loadEntireInventory": false,
+    "blackList": {
+        "keepItemType": [""],
+        "keepAppID": [],
+        "keepGame": {
+            "keepMethod": "Both",
+            "keepNames": [""],
+            "keepThreshold": 70.0
+        },
+        "keepItem": {
+            "keepMethod": "Both",
+            "keepNames": [""],
+            "keepThreshold": 70.0,
+            "includeTypeSearch": true
+        }
+    }
+}
