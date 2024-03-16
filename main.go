@@ -131,7 +131,7 @@ func loadConfig() jsonConfig {
 
 func matchContains[T comparable](item T, array []T, toString func(T) string) bool {
 	for i := 0; i < len(array); i++ {
-		if strings.Contains(toString(item), toString(array[i])) {
+		if strings.Contains(toString(array[i]), toString(item)) {
 			return true
 		}
 	}
@@ -141,7 +141,7 @@ func matchContains[T comparable](item T, array []T, toString func(T) string) boo
 
 func matchLevenshtein[T comparable](item T, array []T, toString func(T) string, metric *metrics.Levenshtein, treshold float64) bool {
 	for i := 0; i < len(array); i++ {
-		if similarity := strutil.Similarity(toString(item), toString(array[i]), metric) * 100; similarity >= treshold {
+		if similarity := strutil.Similarity(toString(array[i]), toString(item), metric) * 100; similarity >= treshold {
 			return true
 		}
 	}
