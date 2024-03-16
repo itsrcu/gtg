@@ -203,7 +203,7 @@ Y8b d88P       Y8b d88P
 	}
 
 	for inventory.LoadMore == 1 && *config.LoadEntireInventory {
-		gtgLogger.Info().Str("lastassetid", inventory.LastAssetID).Msg("sending request to load more inventory items")
+		gtgLogger.Info().Str("lastAssetID", inventory.LastAssetID).Msg("sending request to load more inventory items")
 
 		ldMoreRequest, ldMoreRequestErr := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("https://steamcommunity.com/inventory/%s/753/6?l=english&count=5000&start_assetid=%s", *config.SteamID, inventory.LastAssetID), http.NoBody)
 		if ldMoreRequestErr != nil {
@@ -228,7 +228,7 @@ Y8b d88P       Y8b d88P
 		inventory.LastAssetID = ldInventory.LastAssetID
 	}
 
-	gtgLogger.Info().Int("itemcount", len(inventory.Descriptions)).Msg("loaded inventory")
+	gtgLogger.Info().Int("itemCount", len(inventory.Descriptions)).Msg("loaded inventory")
 
 	for i := 0; i < len(inventory.Descriptions); i++ {
 		item := inventory.Descriptions[i]
@@ -236,7 +236,7 @@ Y8b d88P       Y8b d88P
 
 		// safety check
 		if !(len(itemTags) > 2) {
-			gtgLogger.Error().Int("appid", item.AppID).Int("tagcount", len(itemTags)).Msg("missing minimum tag count of 2, skipping")
+			gtgLogger.Error().Int("appID", item.AppID).Int("tagCount", len(itemTags)).Msg("missing minimum tag count of 2, skipping")
 			continue
 		}
 
@@ -245,13 +245,13 @@ Y8b d88P       Y8b d88P
 
 		// appID check
 		if matchContains(item.AppID, config.Blacklist.KeepAppID, strconv.Itoa) {
-			gtgLogger.Info().Int("appid", item.AppID).Msg("appid is on the blacklist, skipping")
+			gtgLogger.Info().Int("appID", item.AppID).Msg("appid is on the blacklist, skipping")
 			continue
 		}
 
 		// itemType check
 		if matchContains(itemType, config.Blacklist.KeepItemType, strings.ToLower) {
-			gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("item type is on the blacklist, skipping")
+			gtgLogger.Info().Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("itemTypeShort is on the blacklist, skipping")
 			continue
 		}
 
@@ -274,25 +274,25 @@ Y8b d88P       Y8b d88P
 
 		// gameName check
 		if keepFunc[strings.ToLower(config.Blacklist.KeepGame.KeepMethod)](gameName, config.Blacklist.KeepGame.KeepNames, config.Blacklist.KeepGame.KeepThreshold) {
-			gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("gamename is on the blacklist, skipping")
+			gtgLogger.Info().Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("gameName is on the blacklist, skipping")
 			continue
 		}
 
 		// itemName check
 		if keepFunc[strings.ToLower(config.Blacklist.KeepItem.KeepMethod)](item.Name, config.Blacklist.KeepItem.KeepNames, config.Blacklist.KeepItem.KeepThreshold) {
-			gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("itemname is on the blacklist, skipping")
+			gtgLogger.Info().Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("itemName is on the blacklist, skipping")
 			continue
 		}
 
 		// itemTypeLong check
 		if config.Blacklist.KeepItem.IncludeTypeSearch {
 			if keepFunc[strings.ToLower(config.Blacklist.KeepItem.KeepMethod)](item.TypeLong, config.Blacklist.KeepItem.KeepNames, config.Blacklist.KeepItem.KeepThreshold) {
-				gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("item type (long) is on the blacklist, skipping")
+				gtgLogger.Info().Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("itemTypeLong is on the blacklist, skipping")
 				continue
 			}
 		}
 
-		gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("item didn't match any blacklist settings")
+		gtgLogger.Info().Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("item didn't match any blacklist settings")
 
 		// testDrive check
 		if *config.TestDrive {
@@ -311,7 +311,7 @@ Y8b d88P       Y8b d88P
 		for v := 0; v < len(assetIDs)-*config.KeepCount; v++ {
 			gooValueRequest, gooValueRequestErr := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("https://steamcommunity.com/id/%s/ajaxgetgoovalue/?sessionid=%s&appid=%d&assetid=%s&contextid=6", *config.VanityLink, *config.SessionID, item.AppID, assetIDs[v]), http.NoBody)
 			if gooValueRequestErr != nil {
-				gtgLogger.Error().Err(gooValueRequestErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to create gem value request")
+				gtgLogger.Error().Err(gooValueRequestErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to create gem value request")
 				continue
 			}
 
@@ -319,7 +319,7 @@ Y8b d88P       Y8b d88P
 
 			gooValueResponse, gooValueErr := timeoutClient.Do(gooValueRequest)
 			if gooValueErr != nil {
-				gtgLogger.Error().Err(gooValueErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to get gem value for item")
+				gtgLogger.Error().Err(gooValueErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to get gem value for item")
 				continue
 			}
 			defer gooValueResponse.Body.Close()
@@ -327,7 +327,7 @@ Y8b d88P       Y8b d88P
 			var goo gooAPI
 
 			if gooDecodeErr := json.NewDecoder(gooValueResponse.Body).Decode(&goo); gooDecodeErr != nil {
-				gtgLogger.Error().Err(gooDecodeErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to decode gem value data")
+				gtgLogger.Error().Err(gooDecodeErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to decode gem value data")
 				continue
 			}
 
@@ -347,7 +347,7 @@ Y8b d88P       Y8b d88P
 
 			grindRequest, grindRequestErr := http.NewRequestWithContext(context.Background(), http.MethodPost, fmt.Sprintf("https://steamcommunity.com/id/%s/ajaxgrindintogoo", *config.VanityLink), body)
 			if grindRequestErr != nil {
-				gtgLogger.Error().Err(grindRequestErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to create item grind request")
+				gtgLogger.Error().Err(grindRequestErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to create item grind request")
 				continue
 			}
 
@@ -356,7 +356,7 @@ Y8b d88P       Y8b d88P
 
 			grindResponse, grindResponseErr := timeoutClient.Do(grindRequest)
 			if grindResponseErr != nil {
-				gtgLogger.Error().Err(grindResponseErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to grind item into gems")
+				gtgLogger.Error().Err(grindResponseErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to grind item into gems")
 				continue
 			}
 			defer grindResponse.Body.Close()
@@ -364,26 +364,31 @@ Y8b d88P       Y8b d88P
 			var grind grindAPI
 
 			if grindDecodeErr := json.NewDecoder(grindResponse.Body).Decode(&grind); grindDecodeErr != nil {
-				gtgLogger.Error().Err(grindDecodeErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to decode grind data")
+				gtgLogger.Error().Err(grindDecodeErr).Str("gameName", gameName).Str("itemName", item.Name).Str("itemTypeShort", itemType).Str("itemTypeLong", item.TypeLong).Msg("failed to decode grind data")
 				continue
 			}
 
 			if grind.Success != 1 {
 				gtgLogger.Error().
-					Str("status", grindResponse.Status).
-					Str("url", grindRequest.URL.String()).
-					Str("itemname", item.Name).
-					Int("success", grind.Success).
+					Str("responseStatus", grindResponse.Status).
+					Str("requestURL", grindRequest.URL.String()).
+					Str("gameName", gameName).
+					Str("itemName", item.Name).
+					Str("itemTypeShort", itemType).
+					Str("itemTypeLong", item.TypeLong).
+					Int("successCode", grind.Success).
 					Msg("non-one success code")
 
 				continue
 			}
 
 			gtgLogger.Info().
-				Str("itemname", item.Name).
-				Str("itemtype", item.TypeLong).
-				Str("gem value", goo.Value).
-				Str("total gems", grind.GooTotal).
+				Str("gameName", gameName).
+				Str("itemName", item.Name).
+				Str("itemTypeShort", itemType).
+				Str("itemTypeLong", item.TypeLong).
+				Str("gemValue", goo.Value).
+				Str("totalGems", grind.GooTotal).
 				Msg("item grinded into gems")
 		}
 	}
