@@ -58,6 +58,7 @@ type (
 		SessionID           *string `json:"sessionID"`
 		AccessToken         *string `json:"accessToken"`
 		KeepCount           *int    `json:"keepCount"`
+		TestDrive           *bool   `json:"testDrive"`
 		LoadEntireInventory *bool   `json:"loadEntireInventory"`
 		Blacklist           struct {
 			KeepItemType []string `json:"keepItemType"`
@@ -103,9 +104,16 @@ func loadConfig() jsonConfig {
 
 	if cfg.SteamID == nil || *cfg.SteamID == "" ||
 		cfg.VanityLink == nil || *cfg.VanityLink == "" ||
-		cfg.SessionID == nil || *cfg.SessionID == "" ||
-		cfg.AccessToken == nil || *cfg.AccessToken == "" ||
-		cfg.KeepCount == nil || cfg.LoadEntireInventory == nil {
+		cfg.KeepCount == nil || cfg.LoadEntireInventory == nil ||
+		cfg.TestDrive == nil {
+		log.Panic("missing or empty config fields")
+	}
+
+	if *cfg.TestDrive {
+		log.Println("test mode, items will not be shredded, to continue, press enter.")
+		fmt.Scanln()
+	} else if cfg.SessionID == nil || *cfg.SessionID == "" ||
+		cfg.AccessToken == nil || *cfg.AccessToken == "" {
 		log.Panic("missing or empty config fields")
 	}
 
@@ -282,6 +290,13 @@ Y8b d88P       Y8b d88P
 				gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("item type (long) is on the blacklist, skipping")
 				continue
 			}
+		}
+
+		gtgLogger.Info().Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("item didn't match any blacklist settings")
+
+		// testDrive check
+		if *config.TestDrive {
+			continue
 		}
 
 		var assetIDs []string

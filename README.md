@@ -13,6 +13,7 @@
     "sessionID": "",
     "accessToken": "",
     "keepCount": 1,
+    "testDrive": true,
     "loadEntireInventory": false,
     "blackList": {
         "keepItemType": [""],
@@ -54,12 +55,12 @@
 * Your SteamID will be visible above the lookup section: `You are currently signed in as 76561198#########. Click this or your avatar in the navbar to view your profile.`
 
 ### steamVanityLink
-A custom URL you can set that will redirect to your Steam profile
+A custom URL you can set that will redirect to your Steam profile.
 
-Navigating to https://steamcommunity.com/my will redirect you to the value you set it as, for example, https://steamcommunity.com/id/###, where ### is your vanity/custom link
+Navigating to https://steamcommunity.com/my will redirect you to the value you set it as, for example, https://steamcommunity.com/id/###, where ### is your vanity/custom link.
 
 ### sessionID
-A 24 character long hex string, used in the `steamLoginSecure` cookie. This renews every 24 hours
+A 24 character long hex string, used in the `steamLoginSecure` cookie. This renews every 24 hours.
 
 **Method A)**
 * Open your Steam Community Profile (https://steamcommunity.com/my)
@@ -73,7 +74,7 @@ A 24 character long hex string, used in the `steamLoginSecure` cookie. This rene
 > https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
 
 ### accessToken
-A very long character string, used in the `steamLoginSecure` cookie. This renews every 24 hours
+A very long character string, used in the `steamLoginSecure` cookie. This renews every 24 hours.
 
 **Method A)**
 * Open your Steam Community Profile (https://steamcommunity.com/my)
@@ -84,17 +85,20 @@ A very long character string, used in the `steamLoginSecure` cookie. This renews
 ### keepCount
 If you have multiple copies of the same item, keepCount will determine how many of them should be kept. 1 will keep one copy of each item, 2 will keep two, and so on..
 
+### testDrive
+Default set to true, in this mode, `sessionID` and `accessToken` aren't required, and items will not be shredded. Items will still be logged whether they got detected by one of the blacklist filters or not.
+
 ### loadEntireInventory
-Initially, only 5000 items will be loaded into the internal `inventory` variable. Setting this to true will check if there are more items to load, and won't continue until the entire inventory is loaded into the variable
+Initially, only 5000 items will be loaded into the internal `inventory` variable. Setting this to true will check if there are more items to load, and won't continue until the entire inventory is loaded into the variable.
 
 ### keepItemType
 > [!IMPORTANT]
-> **It's advised to also put this in the keepItem's keepNames**, as for example, sale items aren't marked as such, but  instead marked as, for example, "2023 Winter Sale"
+> **It's advised to also put this in the keepItem's keepNames**, as for example, sale items aren't marked as such, but  instead marked as, for example, "2023 Winter Sale".
 
 Keeps specified item types from being shredded. Common types are `Emoticon`, `Normal` (for cards), `Profile Background`, `{Season} Sale {Year}`.
 
 ### keepAppID
-Keeps items from the specified appID from being shredded
+Keeps items from the specified appID from being shredded.
 
 **Method A)**
 * Open the game's store page
@@ -105,16 +109,16 @@ Keeps items from the specified appID from being shredded
 * Search for the game's name, and the `App ID` column should be right below the game's name
 
 ### keepMethod
-Determines which method should be used for game/item name lookups. Valid options are `Both`, `Contains` or `Levenshtein` (these are lowered internally, and are not case-sensitive in the config file). If `Both` is specified, then `Contains` will run first, then `Levenshtein`
+Determines which method should be used for game/item name lookups. Valid options are `Both`, `Contains` or `Levenshtein` (these are lowered internally, and are not case-sensitive in the config file). If `Both` is specified, then `Contains` will run first, then `Levenshtein`.
 
 ### keepNames
 Keeps specified games/items from being shredded. This is not case-sensitive, as `Contains` will lower both the config's input, and the game/item's names, and `Levenshtein`'s config is set to not be case-sensitive.
 
 ### keepThreshold
-Used in the Levenshtein lookup, can be `0.0`-`100.0`, keeps anything equal or over the threshold
+Used in the Levenshtein lookup, can be `0.0`-`100.0`, keeps anything equal or over the threshold.
 
 ### includeTypeSearch
 > [!NOTE]
 > **This is different from keepItemType**.
 
-This uses the inventory's item description type for the lookups, for example, `Detroit: Become Human Profile Background` or `Resident Evil 4 (2005) Emoticon`
+This uses the inventory's item description type for the lookups, for example, `Detroit: Become Human Profile Background` or `Resident Evil 4 (2005) Emoticon`.

@@ -4,6 +4,7 @@
     "sessionID": "",
     "accessToken": "",
     "keepCount": 1,
+    "testDrive": true,
     "loadEntireInventory": false,
     "blackList": {
         "keepItemType": [""],
