@@ -7,7 +7,7 @@
     "loadEntireInventory": false,
     "blackList": {
         "keepItemType": [""],
-        "keepAppID": [],
+        "keepAppID": [753],
         "keepGame": {
             "keepMethod": "Both",
             "keepNames": [""],
