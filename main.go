@@ -109,6 +109,15 @@ func loadConfig() jsonConfig {
 		log.Panic("missing or empty config fields")
 	}
 
+	lowerGameMethod := strings.ToLower(cfg.Blacklist.KeepGame.KeepMethod)
+	lowerItemMethod := strings.ToLower(cfg.Blacklist.KeepItem.KeepMethod)
+
+	if lowerGameMethod != "both" && lowerGameMethod != "levenshtein" && lowerGameMethod != "contains" ||
+		lowerItemMethod != "both" && lowerItemMethod != "levenshtein" && lowerItemMethod != "contains" {
+		log.Println("one of your keep methods seems invalid, is it correct? if so, press enter.")
+		fmt.Scanln()
+	}
+
 	if len(cfg.Blacklist.KeepAppID) == 0 ||
 		len(cfg.Blacklist.KeepItemType) == 0 ||
 		len(cfg.Blacklist.KeepGame.KeepNames) == 0 ||
@@ -187,6 +196,7 @@ Y8b d88P       Y8b d88P
 
 	for inventory.LoadMore == 1 && *config.LoadEntireInventory {
 		gtgLogger.Info().Str("lastassetid", inventory.LastAssetID).Msg("sending request to load more inventory items")
+
 		ldMoreRequest, ldMoreRequestErr := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("https://steamcommunity.com/inventory/%s/753/6?l=english&count=5000&start_assetid=%s", *config.SteamID, inventory.LastAssetID), http.NoBody)
 		if ldMoreRequestErr != nil {
 			gtgLogger.Fatal().Err(ldMoreRequestErr).Msg("failed to get inventory")
@@ -209,6 +219,8 @@ Y8b d88P       Y8b d88P
 		inventory.LoadMore = ldInventory.LoadMore
 		inventory.LastAssetID = ldInventory.LastAssetID
 	}
+
+	gtgLogger.Info().Int("itemcount", len(inventory.Descriptions)).Msg("loaded inventory")
 
 	for i := 0; i < len(inventory.Descriptions); i++ {
 		item := inventory.Descriptions[i]
@@ -236,7 +248,7 @@ Y8b d88P       Y8b d88P
 		}
 
 		keepFunc := make(map[string]func(name string, array []string, treshold float64) bool)
-		keepFunc["contains"] = func(name string, array []string, treshold float64) bool {
+		keepFunc["contains"] = func(name string, array []string, _ float64) bool {
 			return matchContains(name, array, strings.ToLower)
 		}
 
@@ -273,6 +285,7 @@ Y8b d88P       Y8b d88P
 		}
 
 		var assetIDs []string
+
 		for k := 0; k < len(inventory.Assets); k++ {
 			if item.ClassID == inventory.Assets[k].ClassID &&
 				item.InstanceID == inventory.Assets[k].InstanceID {
@@ -280,8 +293,8 @@ Y8b d88P       Y8b d88P
 			}
 		}
 
-		for i := 0; i < len(assetIDs)-*config.KeepCount; i++ {
-			gooValueRequest, gooValueRequestErr := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("https://steamcommunity.com/id/%s/ajaxgetgoovalue/?sessionid=%s&appid=%d&assetid=%s&contextid=6", *config.VanityLink, *config.SessionID, item.AppID, assetIDs[i]), http.NoBody)
+		for v := 0; v < len(assetIDs)-*config.KeepCount; v++ {
+			gooValueRequest, gooValueRequestErr := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("https://steamcommunity.com/id/%s/ajaxgetgoovalue/?sessionid=%s&appid=%d&assetid=%s&contextid=6", *config.VanityLink, *config.SessionID, item.AppID, assetIDs[v]), http.NoBody)
 			if gooValueRequestErr != nil {
 				gtgLogger.Error().Err(gooValueRequestErr).Str("game", gameName).Str("itemname", item.Name).Str("itemtype", item.TypeLong).Msg("failed to create gem value request")
 				continue
@@ -315,7 +328,7 @@ Y8b d88P       Y8b d88P
 				continue
 			}
 
-			body := bytes.NewBufferString(fmt.Sprintf(`sessionid=%s&appid=%d&assetid=%s&contextid=6&goo_value_expected=%s`, *config.SessionID, item.AppID, assetIDs[i], goo.Value))
+			body := bytes.NewBufferString(fmt.Sprintf(`sessionid=%s&appid=%d&assetid=%s&contextid=6&goo_value_expected=%s`, *config.SessionID, item.AppID, assetIDs[v], goo.Value))
 
 			grindRequest, grindRequestErr := http.NewRequestWithContext(context.Background(), http.MethodPost, fmt.Sprintf("https://steamcommunity.com/id/%s/ajaxgrindintogoo", *config.VanityLink), body)
 			if grindRequestErr != nil {
@@ -359,4 +372,5 @@ Y8b d88P       Y8b d88P
 				Msg("item grinded into gems")
 		}
 	}
+	gtgLogger.Info().Msg("finished")
 }
