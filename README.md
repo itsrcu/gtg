@@ -1,5 +1,10 @@
-# gtg
-Grind To Gems, a tool to help grind unnecessary items from your steam inventory.. into gems!
+<h1 align="center">gtg 💎</h1>
+<p align="center"><code>g</code>rind <code>t</code>o <code>g</code>ems, a tool to help grind specified items from your Steam inventory... into gems!</p>
+
+> [!CAUTION]
+> **While gtg should be safe to use under normal circumstances (if it is configured properly), there is absolutely NO warranty for it. (see the <a href="https://github.com/itsrcu/gtg/blob/main/LICENSE">license</a>)**
+> 
+> **Use it at your own discretion.**
 
 ```json
 {
@@ -83,7 +88,10 @@ If you have multiple copies of the same item, keepCount will determine how many 
 Initially, only 5000 items will be loaded into the internal `inventory` variable. Setting this to true will check if there are more items to load, and won't continue until the entire inventory is loaded into the variable
 
 ### keepItemType
-Keeps specified item types from being shredded. **It's advised to also put this in the keepItem's keepNames**, as for example, sale items aren't marked as such, but  instead marked as, for example, "2023 Winter Sale"
+> [!IMPORTANT]
+> **It's advised to also put this in the keepItem's keepNames**, as for example, sale items aren't marked as such, but  instead marked as, for example, "2023 Winter Sale"
+
+Keeps specified item types from being shredded. Common types are `Emoticon`, `Normal` (for cards), `Profile Background`, `{Season} Sale {Year}`.
 
 ### keepAppID
 Keeps items from the specified appID from being shredded
@@ -106,4 +114,7 @@ Keeps specified games/items from being shredded. This is not case-sensitive, as 
 Used in the Levenshtein lookup, can be `0.0`-`100.0`, keeps anything equal or over the threshold
 
 ### includeTypeSearch
-**This is different from keepItemType**. This uses the inventory's item description type for the lookups, for example, `Detroit: Become Human Profile Background` or `Resident Evil 4 (2005) Emoticon`
+> [!NOTE]
+> **This is different from keepItemType**.
+
+This uses the inventory's item description type for the lookups, for example, `Detroit: Become Human Profile Background` or `Resident Evil 4 (2005) Emoticon`
