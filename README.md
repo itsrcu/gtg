@@ -6,6 +6,20 @@
 > 
 > **Use it at your own discretion.**
 
+<h1 align="center">Installation and usage 💿</h1>
+
+1. Download the latest Go version from <a href="https://go.dev/dl">here</a> (https://go.dev/dl)
+2. Follow the <a href="https://go.dev/doc/install">Installation instructions</a> (https://go.dev/doc/install)
+3. Clone, or download the repository
+    - To clone, type: `git clone https://github.com/itsrcu/gtg.git`
+    - To download, click <a href="https://github.com/itsrcu/gtg/archive/refs/heads/main.zip">here</a> (https://github.com/itsrcu/gtg/archive/refs/heads/main.zip)
+4. After cloning / unzipping, enter the `gtg(-main)` directory, and rename `config.example.json` to `config.json`
+5. Configure gtg according to your preferences. See the <a href="https://github.com/itsrcu/gtg#configuration-">Configuration ⚙️</a> section
+6. Run `go run main.go`
+    - If configured properly, items are being started to be turned into gems
+
+<h1 align="center">Configuration ⚙️</h1>
+
 ```json
 {
     "steamID": "",
