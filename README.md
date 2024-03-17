@@ -1,5 +1,5 @@
 <h1 align="center">gtg 💎</h1>
-<p align="center"><code>g</code>rind <code>t</code>o <code>g</code>ems, a tool to help grind specified items from your Steam inventory... into gems!</p>
+<p align="center"><code>g</code>rind <code>t</code>o <code>g</code>ems, a tool to help automatically grind specified items from your Steam inventory... into gems!</p>
 
 > [!CAUTION]
 > **While gtg should be safe to use under normal circumstances (if it is configured properly), there is absolutely NO warranty for it. (see the <a href="https://github.com/itsrcu/gtg/blob/main/LICENSE">license</a>)**
