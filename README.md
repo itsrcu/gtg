@@ -13,10 +13,10 @@
 3. Clone, or download the repository
     - To clone, type: `git clone https://github.com/itsrcu/gtg.git`
     - To download, click <a href="https://github.com/itsrcu/gtg/archive/refs/heads/main.zip">here</a> (https://github.com/itsrcu/gtg/archive/refs/heads/main.zip)
-4. After cloning / unzipping, enter the `gtg(-main)` directory, and rename `config.example.json` to `config.json`
+4. After cloning/unzipping, enter the `gtg(-main)` directory, and rename `config.example.json` to `config.json`
 5. Configure gtg according to your preferences. See the <a href="https://github.com/itsrcu/gtg#configuration-">Configuration ⚙️</a> section
 6. Run `go run main.go`
-    - If configured properly, items are being started to be turned into gems
+    - If configured properly, items based on the config are starting to be turned into gems
 
 <h1 align="center">Configuration ⚙️</h1>
 
@@ -54,7 +54,7 @@
 **Method A)**
 * Open your Steam Community Profile (https://steamcommunity.com/my)
 * Click Edit Profile
-* If you've never set a custom Steam Community URL for your account, your 64 bit ID will will be shown in the URL under the CUSTOM URL box in the format 76561198#########
+* If you've never set a custom Steam Community URL for your account, your 64 bit ID will be shown in the URL under the CUSTOM URL box in the format 76561198#########
 * If you have set a custom URL for your account, you can delete the text in the CUSTOM URL box to see your account's 64 bit ID in the URL listed below.
 
 **Method B)**
@@ -126,10 +126,10 @@ Keeps items from the specified appID from being shredded.
 Determines which method should be used for game/item name lookups. Valid options are `Both`, `Contains` or `Levenshtein` (these are lowered internally, and are not case-sensitive in the config file). If `Both` is specified, then `Contains` will run first, then `Levenshtein`.
 
 ### keepNames
-Keeps specified games/items from being shredded. This is not case-sensitive, as `Contains` will lower both the config's input, and the game/item's names, and `Levenshtein`'s config is set to not be case-sensitive.
+Keeps specified games/items from being shredded. This is not case-sensitive, as `Contains` will lower both the config's input, and the game/items names, and `Levenshtein`'s config is set to not be case-sensitive.
 
 ### keepThreshold
-Used in the Levenshtein lookup, can be `0.0`-`100.0`, keeps anything equal or over the threshold.
+Used in the Levenshtein lookup, can be `0.0` to `100.0`, keeps anything equal or over the threshold.
 
 ### includeTypeSearch
 > [!NOTE]
