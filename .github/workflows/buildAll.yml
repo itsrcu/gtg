@@ -127,11 +127,18 @@ jobs:
         7z a gtg-linux.zip gtg-i386-linux gtg-amd64-linux gtg-arm-linux gtg-arm64-linux LICENSE config.example.json
 
         echo "OK"
+      
+    # https://github.com/orgs/community/discussions/26342
+    - name: Set date
+      run: |
+        echo "buildDate=$(date --rfc-3339=date)" >> $GITHUB_ENV
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
+        name: "${{ env.buildDate }} latest"
         tag_name: "latest"
+        body: "### This is an automated build, based on ${{ github.sha }}.<br>For a more ideal result, or if something goes awry, it's recommended to build on your own machine."
         files: |
           gtg-linux.zip
 
@@ -144,7 +151,7 @@ jobs:
 
     - name: Modify go.mod
       run: |
-        sed -i 's/go [0-9].*/go 1.20/' go.mod
+        sed -i'' -e 's/go [0-9].*/go 1.20/' go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
