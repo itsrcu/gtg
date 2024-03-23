@@ -144,7 +144,7 @@ jobs:
 
     - name: Modify go.mod
       run: |
-        sed -i 's/go [0-9].*/go 1.20.14/' go.mod
+        sed -i 's/go [0-9].*/go 1.20/' go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
@@ -185,7 +185,7 @@ jobs:
 
     - name: Modify go.mod
       run: |
-        (Get-Content go.mod) -replace 'go [0-9].*', 'go 1.20.14' | Set-Content go.mod
+        (Get-Content go.mod) -replace 'go [0-9].*', 'go 1.20' | Set-Content go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
@@ -235,7 +235,7 @@ jobs:
 
     - name: Modify go.mod
       run: |
-        sed -i 's/go [0-9].*/go 1.20.14/' go.mod
+        sed -i 's/go [0-9].*/go 1.20/' go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
