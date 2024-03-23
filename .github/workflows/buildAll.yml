@@ -2,6 +2,8 @@ name: Build All
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
     branches:
       - main
 

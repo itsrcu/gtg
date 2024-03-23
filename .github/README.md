@@ -8,6 +8,7 @@
 
 <h1 align="center">Installation and usage 💿</h1>
 
+**Method A)**
 1. Download the latest Go version from <a href="https://go.dev/dl">here</a> (https://go.dev/dl)
 2. Follow the <a href="https://go.dev/doc/install">Installation instructions</a> (https://go.dev/doc/install)
 3. Clone, or download the repository
@@ -17,6 +18,21 @@
 5. Configure gtg according to your preferences. See the <a href="https://github.com/itsrcu/gtg#configuration-">Configuration ⚙️</a> section
 6. Run `go run main.go`
     - If configured properly, items based on the config are starting to be turned into gems
+
+**Method B)**
+1. Navigate to the <a href="https://github.com/itsrcu/gtg/releases/tag/latest">latest release</a> (https://github.com/itsrcu/gtg/releases/tag/latest)
+2. Download your OS' zip file.
+    - Every push will build gtg for several OS' and architectures
+        - `legacy` builds use an older version of Go. **These exist for compatability, and should ONLY be used if your OS does not support Go 1.21+**. Those being:
+            - `Windows 7 or newer`
+            - `Kernel 2.6.32 or newer`
+            - `macOS 10.13 High Sierra or newer`
+3. Extract the zip, and run `gtg-<architecture>-<os>`
+    - If you aren't sure about your architecture, run `uname -m`
+        - `x86_64` = should run `amd64`
+        - `i686` or `i386` = should run `i386`
+        - `armv7l` = should run `arm`
+        - `aarch64` = should run `arm64`
 
 <h1 align="center">Configuration ⚙️</h1>
 
