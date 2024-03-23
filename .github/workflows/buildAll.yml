@@ -142,6 +142,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Modify go.mod
+      run: |
+        sed -i 's/go [0-9].*/go 1.20.14/' go.mod
+
     - name: Setup Go Environment
       uses: actions/setup-go@v5
       with:
@@ -178,6 +182,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Modify go.mod
+      run: |
+        (Get-Content go.mod) -replace 'go [0-9].*', 'go 1.20.14' | Set-Content go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
@@ -224,6 +232,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Modify go.mod
+      run: |
+        sed -i 's/go [0-9].*/go 1.20.14/' go.mod
 
     - name: Setup Go Environment
       uses: actions/setup-go@v5
