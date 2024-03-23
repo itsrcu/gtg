@@ -1,0 +1,262 @@
+name: Build All
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  latestMajor: '1.22'
+
+jobs:
+  macOSLatest:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.latestMajor }}
+        check-latest: true
+        cache: false
+    
+    - name: MacOS Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-macos main.go
+
+        echo "ARM64 build"
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-macos main.go
+
+        echo "Compressing"
+        7z a gtg-macos.zip gtg-arm64-macos gtg-amd64-macos LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-macos.zip
+
+  windowsLatest:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.latestMajor }}
+        check-latest: true
+        cache: false
+    
+    - name: Windows Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-windows main.go
+
+        echo "x32 build"
+        $Env:GOARCH = '386'
+        go build -ldflags="-s -w" -o gtg-i386-windows main.go
+
+        echo "ARM build"
+        $Env:GOARCH = 'arm'
+        go build -ldflags="-s -w" -o gtg-arm-windows main.go
+
+        echo "ARM64 build"
+        $Env:GOARCH = 'arm64'
+        go build -ldflags="-s -w" -o gtg-arm64-windows main.go
+
+        echo "Compressing"
+        7z a gtg-windows.zip gtg-i386-windows gtg-amd64-windows gtg-arm-windows gtg-arm64-windows LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-windows.zip
+
+  linuxLatest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.latestMajor }}
+        check-latest: true
+        cache: false
+    
+    - name: Linux Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-linux main.go
+
+        echo "x32 build"
+        GOARCH=386 go build -ldflags="-s -w" -o gtg-i386-linux main.go
+
+        echo "ARM build"
+        GOARCH=arm go build -ldflags="-s -w" -o gtg-arm-linux main.go
+
+        echo "ARM64 build"
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-linux main.go
+
+        echo "Compressing"
+        7z a gtg-linux.zip gtg-i386-linux gtg-amd64-linux gtg-arm-linux gtg-arm64-linux LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-linux.zip
+
+  macOSLegacy:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.20'
+        check-latest: true
+        cache: false
+    
+    - name: MacOS Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-macos main.go
+
+        echo "ARM64 build"
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-macos main.go
+
+        echo "Compressing"
+        7z a gtg-macos.zip gtg-arm64-macos gtg-amd64-macos LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-macos.zip
+
+  windowsLegacy:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.20'
+        check-latest: true
+        cache: false
+    
+    - name: Windows Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-windows main.go
+
+        echo "x32 build"
+        $Env:GOARCH = '386'
+        go build -ldflags="-s -w" -o gtg-i386-windows main.go
+
+        echo "ARM build"
+        $Env:GOARCH = 'arm'
+        go build -ldflags="-s -w" -o gtg-arm-windows main.go
+
+        echo "ARM64 build"
+        $Env:GOARCH = 'arm64'
+        go build -ldflags="-s -w" -o gtg-arm64-windows main.go
+
+        echo "Compressing"
+        7z a gtg-windows.zip gtg-i386-windows gtg-amd64-windows gtg-arm-windows gtg-arm64-windows LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-windows.zip
+
+  linuxLegacy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Go Environment
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.20'
+        check-latest: true
+        cache: false
+    
+    - name: Linux Build
+      run: |
+        echo "Updating dependencies"
+        go get -u
+
+        echo "x64 build"
+        go build -ldflags="-s -w" -o gtg-amd64-linux main.go
+
+        echo "x32 build"
+        GOARCH=386 go build -ldflags="-s -w" -o gtg-i386-linux main.go
+
+        echo "ARM build"
+        GOARCH=arm go build -ldflags="-s -w" -o gtg-arm-linux main.go
+
+        echo "ARM64 build"
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-linux main.go
+
+        echo "Compressing"
+        7z a gtg-linux.zip gtg-i386-linux gtg-amd64-linux gtg-arm-linux gtg-arm64-linux LICENSE config.example.json
+
+        echo "OK"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "latest"
+        files: |
+          gtg-linux.zip
