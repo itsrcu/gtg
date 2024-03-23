@@ -149,19 +149,19 @@ jobs:
         check-latest: true
         cache: false
     
-    - name: MacOS Build
+    - name: Legacy MacOS Build
       run: |
         echo "Updating dependencies"
         go get -u
 
         echo "x64 build"
-        go build -ldflags="-s -w" -o gtg-amd64-macos main.go
+        go build -ldflags="-s -w" -o gtg-amd64-macos-legacy main.go
 
         echo "ARM64 build"
-        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-macos main.go
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-macos-legacy main.go
 
         echo "Compressing"
-        7z a gtg-macos.zip gtg-arm64-macos gtg-amd64-macos LICENSE config.example.json
+        7z a gtg-macos-legacy.zip gtg-arm64-macos-legacy gtg-amd64-macos-legacy LICENSE config.example.json
 
         echo "OK"
 
@@ -170,7 +170,7 @@ jobs:
       with:
         tag_name: "latest"
         files: |
-          gtg-macos.zip
+          gtg-macos-legacy.zip
 
   windowsLegacy:
     runs-on: windows-latest
@@ -186,28 +186,28 @@ jobs:
         check-latest: true
         cache: false
     
-    - name: Windows Build
+    - name: Legacy Windows Build
       run: |
         echo "Updating dependencies"
         go get -u
 
         echo "x64 build"
-        go build -ldflags="-s -w" -o gtg-amd64-windows main.go
+        go build -ldflags="-s -w" -o gtg-amd64-windows-legacy main.go
 
         echo "x32 build"
         $Env:GOARCH = '386'
-        go build -ldflags="-s -w" -o gtg-i386-windows main.go
+        go build -ldflags="-s -w" -o gtg-i386-windows-legacy main.go
 
         echo "ARM build"
         $Env:GOARCH = 'arm'
-        go build -ldflags="-s -w" -o gtg-arm-windows main.go
+        go build -ldflags="-s -w" -o gtg-arm-windows-legacy main.go
 
         echo "ARM64 build"
         $Env:GOARCH = 'arm64'
-        go build -ldflags="-s -w" -o gtg-arm64-windows main.go
+        go build -ldflags="-s -w" -o gtg-arm64-windows-legacy main.go
 
         echo "Compressing"
-        7z a gtg-windows.zip gtg-i386-windows gtg-amd64-windows gtg-arm-windows gtg-arm64-windows LICENSE config.example.json
+        7z a gtg-windows-legacy.zip gtg-i386-windows-legacy gtg-amd64-windows-legacy gtg-arm-windows-legacy gtg-arm64-windows-legacy LICENSE config.example.json
 
         echo "OK"
 
@@ -216,7 +216,7 @@ jobs:
       with:
         tag_name: "latest"
         files: |
-          gtg-windows.zip
+          gtg-windows-legacy.zip
 
   linuxLegacy:
     runs-on: ubuntu-latest
@@ -232,25 +232,25 @@ jobs:
         check-latest: true
         cache: false
     
-    - name: Linux Build
+    - name: Legacy Linux Build
       run: |
         echo "Updating dependencies"
         go get -u
 
         echo "x64 build"
-        go build -ldflags="-s -w" -o gtg-amd64-linux main.go
+        go build -ldflags="-s -w" -o gtg-amd64-linux-legacy main.go
 
         echo "x32 build"
-        GOARCH=386 go build -ldflags="-s -w" -o gtg-i386-linux main.go
+        GOARCH=386 go build -ldflags="-s -w" -o gtg-i386-linux-legacy main.go
 
         echo "ARM build"
-        GOARCH=arm go build -ldflags="-s -w" -o gtg-arm-linux main.go
+        GOARCH=arm go build -ldflags="-s -w" -o gtg-arm-linux-legacy main.go
 
         echo "ARM64 build"
-        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-linux main.go
+        GOARCH=arm64 go build -ldflags="-s -w" -o gtg-arm64-linux-legacy main.go
 
         echo "Compressing"
-        7z a gtg-linux.zip gtg-i386-linux gtg-amd64-linux gtg-arm-linux gtg-arm64-linux LICENSE config.example.json
+        7z a gtg-linux-legacy.zip gtg-i386-linux-legacy gtg-amd64-linux-legacy gtg-arm-linux-legacy gtg-arm64-linux-legacy LICENSE config.example.json
 
         echo "OK"
 
@@ -259,4 +259,4 @@ jobs:
       with:
         tag_name: "latest"
         files: |
-          gtg-linux.zip
+          gtg-linux-legacy.zip
